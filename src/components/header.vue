@@ -1,19 +1,19 @@
 <template>
   <header>
-    <a id="logo" href="">
+    <router-link id="logo" to="/">
       <img src="@/assets/images/logo.png" alt="翰林出版社LOGO" />
-    </a>
+    </router-link>
     <nav>
       <ul>
         <li>
-          <a href="./">
+          <router-link to="/">
             <img src="../assets/images/btnShelf1.png" alt="" />
-          </a>
+          </router-link>
         </li>
         <li>
-          <a href="">
+          <router-link to="/login">
             <img src="../assets/images/signOut.png" alt="" />
-          </a>
+          </router-link>
         </li>
       </ul>
     </nav>
@@ -41,6 +41,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 1;
   #logo {
     display: inline-block;
     width: 250px;
@@ -60,10 +61,10 @@ header {
           transition: 0.3s;
           img {
             width: 100%;
-            height: 100%
+            height: 100%;
           }
-          &:hover{
-            transform:rotate(360deg);
+          &:hover {
+            transform: rotate(360deg);
             margin: 5px;
             border: 1px solid #fff;
           }

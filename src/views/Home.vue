@@ -34,7 +34,12 @@
             <td data-th="PC版本">{{ item.WebVersion }}</td>
             <td data-th="更新日期">{{ item.update_time }}</td>
             <td data-th="操作">
-              <el-button type="primary" icon="el-icon-edit" circle @click="edit(index)" ></el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                circle
+                @click="edit(index)"
+              ></el-button>
             </td>
           </tr>
         </tbody>
@@ -65,15 +70,8 @@
           <!--▲教育程度選擇-->
 
           <!--▼年級選擇-->
-          <el-col v-if="this.add_info.education_level == ''" :sm="24" :md="8">
-            <el-select
-              v-model="add_info.grade"
-              disabled
-              placeholder="年級"
-            ></el-select>
-          </el-col>
           <el-col
-            v-else-if="this.add_info.education_level == '國小'"
+            v-if="this.add_info.education_level == '國小'"
             :sm="24"
             :md="8"
           >
@@ -132,6 +130,13 @@
               </el-option>
             </el-select>
           </el-col>
+          <el-col v-else :sm="24" :md="8">
+            <el-select
+              v-model="add_info.grade"
+              disabled
+              placeholder="年級"
+            ></el-select>
+          </el-col>
           <!--▲年級選擇-->
 
           <el-col :sm="24" :md="8">
@@ -153,7 +158,7 @@
           </el-col>
           <el-col :sm="24" :md="12">
             <el-input
-              v-model="add_info.number"
+              v-model="add_info.order"
               placeholder="請輸入編號"
             ></el-input>
           </el-col>
@@ -164,7 +169,7 @@
             ></el-input>
           </el-col>
           <el-col :sm="24" :md="4">
-            <el-input v-model="add_info.order" placeholder="排序號"></el-input>
+            <el-input v-model="add_info.grade_code" placeholder="排序號"></el-input>
           </el-col>
           <el-col :sm="24" :md="24">
             <el-input v-model="add_info.cover"
@@ -211,7 +216,7 @@
             <el-button
               type="danger"
               icon="el-icon-delete"
-              @click="confirm_vdelete(index)"
+              @click="confirm_vdelete"
               >刪除</el-button
             >
             <el-button
@@ -248,7 +253,6 @@
 // @ is an alias to /src
 import Vheader from "@/components/header.vue";
 import axios from "axios";
-
 export default {
   name: "Home",
   data() {
@@ -257,27 +261,26 @@ export default {
       modify: true,
       popUp: false,
       info: [
-        {
-          id: "",
-          grade_code: "",
-          education_level: "",
-          grade: "",
-          species: "",
-          subject: "",
-          number: "",
-          title: "",
-          order: "",
-          cover: "",
-          Web: "",
-          WebVersion: "",
-          computer: "",
-          computerVersion: "",
-          Mobile: "",
-          MobileVersion: "",
-          update_time: "",
-        },
+        // {
+        //   id: "test",
+        //   grade_code: "",
+        //   education_level: "",
+        //   grade: "",
+        //   species: "",
+        //   subject: "",
+        //   number: "",
+        //   title: "",
+        //   order: "",
+        //   cover: "",
+        //   Web: "",
+        //   WebVersion: "",
+        //   computer: "",
+        //   computerVersion: "",
+        //   Mobile: "",
+        //   MobileVersion: "",
+        //   update_time: "",
+        // },
       ],
-
       education_level_menu: [
         {
           value: "國小",
@@ -296,72 +299,71 @@ export default {
           label: "高職",
         },
       ],
-
       elementary_grade: [
         {
-          value: "1",
+          value: "小一",
           label: "小一",
         },
         {
-          value: "2",
+          value: "小二",
           label: "小二",
         },
         {
-          value: "3",
+          value: "小三",
           label: "小三",
         },
         {
-          value: "4",
+          value: "小四",
           label: "小四",
         },
         {
-          value: "5",
+          value: "小五",
           label: "小五",
         },
         {
-          value: "6",
+          value: "小六",
           label: "小六",
         },
       ],
       secondary_grade: [
         {
-          value: "1",
+          value: "國一",
           label: "國一",
         },
         {
-          value: "2",
+          value: "國二",
           label: "國二",
         },
         {
-          value: "3",
+          value: "國三",
           label: "國三",
         },
       ],
       high_grade: [
         {
-          value: "1",
+          value: "高一",
           label: "高一",
         },
         {
-          value: "2",
+          value: "高二",
           label: "高二",
         },
         {
-          value: "3",
+          value: "高三",
           label: "高三",
         },
       ],
       highe_grade: [
         {
-          value: "1",
+          value: "高一",
           label: "高一",
         },
         {
-          value: "2",
+          value: "高二",
           label: "高二",
         },
         {
-          value: "3",
+          value: "高三",
           label: "高三",
         },
       ],
@@ -375,8 +377,8 @@ export default {
           label: "Flash電子書",
         },
       ],
-
       add_info: {
+        grade_code:"",
         education_level: "",
         grade: "",
         species: "",
@@ -391,17 +393,27 @@ export default {
         computerVersion: "",
         Mobile: "",
         MobileVersion: "",
+        id: 0,
+        update_time: "2020-11-16T17:50:20",
       },
     };
   },
-  created() {
-    axios.get("http://localhost:3000/posts").then((res) => {
-      this.info = res.data;
-    });
+  async created() {
+    await this.loadPage();
   },
   methods: {
+    async loadPage() {
+      let res = await axios.get("http://127.0.0.1:3000/posts");
+      this.info = res.data;
+    },
+    clear_form() {
+      this.add_info = {
+        update_time: "2020-11-16T17:50:20",
+      };
+    },
     add() {
       //打開新增視窗
+      this.clear_form();
       this.modify = true;
       this.popUp = !this.popUp;
     },
@@ -427,39 +439,20 @@ export default {
       this.popUp = !this.popUp;
       this.clear();
     },
-    confirm_add() {
+    async confirm_add() {
       //確認新增
-      axios
-        .post("http://locahost:3000/posts", {
-          education_level: this.add_info.education_level,
-          grade: this.add_info.grade,
-          species: this.add_info.species,
-          subject: this.add_info.subject,
-          number: this.add_info.number,
-          title: this.add_info.title,
-          order: this.add_info.order,
-          cover: this.add_info.cover,
-          Web: this.add_info.Web,
-          WebVersion: this.add_info.WebVersion,
-          computer: this.add_info.computer,
-          computerVersion: this.add_info.computerVersion,
-          Mobile: this.add_info.Mobile,
-          MobileVersion: this.add_info.MobileVersion,
-        })
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      // alert('新增成功!')
-      //
+      await axios.post(`http://127.0.0.1:3000/posts`, {
+        ...this.add_info,
+      });
       this.popUp = !this.popUp;
+      await this.loadPage();
+      this.$swal("新增完成", "您新增了一筆資料","success");
     },
     edit(index) {
       //修改
       this.add_info.education_level = this.info[index].education_level;
       this.add_info.grade = this.info[index].grade;
+      this.add_info.grade_code = this.info[index].grade_code;
       this.add_info.species = this.info[index].species;
       this.add_info.subject = this.info[index].subject;
       this.add_info.number = this.info[index].number;
@@ -472,35 +465,31 @@ export default {
       this.add_info.computerVersion = this.info[index].computerVersion;
       this.add_info.Mobile = this.info[index].Mobile;
       this.add_info.MobileVersion = this.info[index].MobileVersion;
-
+      this.add_info.id = this.info[index].id;
       this.popUp = !this.popUp;
       this.modify = false;
     },
-    confirm_edit(index) {
-      axios.put("http://localhost:3000/posts/" + index, {
-        data: {
-          info: [],
-        },
+    async confirm_edit() {
+      await axios.put(`http://127.0.0.1:3000/posts/${this.add_info.id}`, {
+        ...this.add_info,
       });
+      this.popUp = !this.popUp;
+      await this.loadPage();
+      this.delete_win = false;
+      this.$swal("修改完成", "您修改了一筆資料","success");
     },
-    // confirm_edit(index) {
-    //   axios.put("http://localhost:3000/posts/{index}").then(
-    //     (response) => {
-    //       resolve(response.data);
-    //       this.info[index].Mobile = this.add_info.Mobile;
-    //       this.info[index].MobileVersion = this.add_info.MobileVersion;
-    //     },
-    //     (err) => {
-    //       reject(err);
-    //     }
-    //   );
-    // },
+
     vdelete() {
       this.delete_win = true;
     },
-    confirm_vdelete(index) {
-      this.edit(index);
-      axios.delete("http://localhost:3000/posts/" + index).then();
+    async confirm_vdelete() {
+      await axios.delete(`http://127.0.0.1:3000/posts/${this.add_info.id}`, {
+        ...this.add_info,
+      });
+      this.popUp = !this.popUp;
+      this.delete_win = false;
+      await this.loadPage();
+      this.$swal("刪除成功!", "您刪除了一筆資料","warning");
     },
   },
   components: {
