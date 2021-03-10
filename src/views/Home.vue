@@ -257,25 +257,25 @@ export default {
       modify: true,
       popUp: false,
       info: [
-        {
-          id: "",
-          grade_code: "",
-          education_level: "",
-          grade: "",
-          species: "",
-          subject: "",
-          number: "",
-          title: "",
-          order: "",
-          cover: "",
-          Web: "",
-          WebVersion: "",
-          computer: "",
-          computerVersion: "",
-          Mobile: "",
-          MobileVersion: "",
-          update_time: "",
-        },
+        // {
+        //   id: "test",
+        //   grade_code: "",
+        //   education_level: "",
+        //   grade: "",
+        //   species: "",
+        //   subject: "",
+        //   number: "",
+        //   title: "",
+        //   order: "",
+        //   cover: "",
+        //   Web: "",
+        //   WebVersion: "",
+        //   computer: "",
+        //   computerVersion: "",
+        //   Mobile: "",
+        //   MobileVersion: "",
+        //   update_time: "",
+        // },
       ],
 
       education_level_menu: [
@@ -391,15 +391,18 @@ export default {
         computerVersion: "",
         Mobile: "",
         MobileVersion: "",
+        id: 0,
       },
     };
   },
-  created() {
-    axios.get("http://localhost:3000/posts").then((res) => {
-      this.info = res.data;
-    });
+  async created() {
+      await this.loadPage();
   },
   methods: {
+      async loadPage() {
+        let res = await axios.get("http://127.0.0.1:3000/posts");
+        this.info = res.data;
+      },
     add() {
       //打開新增視窗
       this.modify = true;
@@ -430,7 +433,7 @@ export default {
     confirm_add() {
       //確認新增
       axios
-        .post("http://locahost:3000/posts", {
+        .post("http://127.0.0.1:3000/posts", {
           education_level: this.add_info.education_level,
           grade: this.add_info.grade,
           species: this.add_info.species,
@@ -472,19 +475,20 @@ export default {
       this.add_info.computerVersion = this.info[index].computerVersion;
       this.add_info.Mobile = this.info[index].Mobile;
       this.add_info.MobileVersion = this.info[index].MobileVersion;
+      this.add_info.id = this.info[index].id;
 
       this.popUp = !this.popUp;
       this.modify = false;
     },
-    confirm_edit(index) {
-      axios.put("http://localhost:3000/posts/" + index, {
-        data: {
-          info: [],
-        },
+    async confirm_edit() {
+      await axios.put(`http://127.0.0.1:3000/posts/${this.add_info.id}`, {
+          ...this.add_info
       });
+      this.popUp = !this.popUp;
+      await this.loadPage();
     },
     // confirm_edit(index) {
-    //   axios.put("http://localhost:3000/posts/{index}").then(
+    //   axios.put("http://127.0.0.1:3000/posts/{index}").then(
     //     (response) => {
     //       resolve(response.data);
     //       this.info[index].Mobile = this.add_info.Mobile;
@@ -500,7 +504,7 @@ export default {
     },
     confirm_vdelete(index) {
       this.edit(index);
-      axios.delete("http://localhost:3000/posts/" + index).then();
+      axios.delete("http://127.0.0.1:3000/posts/" + index).then();
     },
   },
   components: {
