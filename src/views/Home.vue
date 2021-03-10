@@ -394,11 +394,15 @@ export default {
         Mobile: "",
         MobileVersion: "",
         id: 0,
+<<<<<<< HEAD
         update_time: "2020-11-16T17:50:20",
+=======
+>>>>>>> origin/main
       },
     };
   },
   async created() {
+<<<<<<< HEAD
     await this.loadPage();
   },
   methods: {
@@ -411,6 +415,15 @@ export default {
         update_time: "2020-11-16T17:50:20",
       };
     },
+=======
+      await this.loadPage();
+  },
+  methods: {
+      async loadPage() {
+        let res = await axios.get("http://127.0.0.1:3000/posts");
+        this.info = res.data;
+      },
+>>>>>>> origin/main
     add() {
       //打開新增視窗
       this.clear_form();
@@ -441,9 +454,37 @@ export default {
     },
     async confirm_add() {
       //確認新增
+<<<<<<< HEAD
       await axios.post(`http://127.0.0.1:3000/posts`, {
         ...this.add_info,
       });
+=======
+      axios
+        .post("http://127.0.0.1:3000/posts", {
+          education_level: this.add_info.education_level,
+          grade: this.add_info.grade,
+          species: this.add_info.species,
+          subject: this.add_info.subject,
+          number: this.add_info.number,
+          title: this.add_info.title,
+          order: this.add_info.order,
+          cover: this.add_info.cover,
+          Web: this.add_info.Web,
+          WebVersion: this.add_info.WebVersion,
+          computer: this.add_info.computer,
+          computerVersion: this.add_info.computerVersion,
+          Mobile: this.add_info.Mobile,
+          MobileVersion: this.add_info.MobileVersion,
+        })
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      // alert('新增成功!')
+      //
+>>>>>>> origin/main
       this.popUp = !this.popUp;
       await this.loadPage();
       this.$swal("新增完成", "您新增了一筆資料","success");
@@ -466,11 +507,16 @@ export default {
       this.add_info.Mobile = this.info[index].Mobile;
       this.add_info.MobileVersion = this.info[index].MobileVersion;
       this.add_info.id = this.info[index].id;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
       this.popUp = !this.popUp;
       this.modify = false;
     },
     async confirm_edit() {
       await axios.put(`http://127.0.0.1:3000/posts/${this.add_info.id}`, {
+<<<<<<< HEAD
         ...this.add_info,
       });
       this.popUp = !this.popUp;
@@ -490,6 +536,31 @@ export default {
       this.delete_win = false;
       await this.loadPage();
       this.$swal("刪除成功!", "您刪除了一筆資料","warning");
+=======
+          ...this.add_info
+      });
+      this.popUp = !this.popUp;
+      await this.loadPage();
+    },
+    // confirm_edit(index) {
+    //   axios.put("http://127.0.0.1:3000/posts/{index}").then(
+    //     (response) => {
+    //       resolve(response.data);
+    //       this.info[index].Mobile = this.add_info.Mobile;
+    //       this.info[index].MobileVersion = this.add_info.MobileVersion;
+    //     },
+    //     (err) => {
+    //       reject(err);
+    //     }
+    //   );
+    // },
+    vdelete() {
+      this.delete_win = true;
+    },
+    confirm_vdelete(index) {
+      this.edit(index);
+      axios.delete("http://127.0.0.1:3000/posts/" + index).then();
+>>>>>>> origin/main
     },
   },
   components: {
