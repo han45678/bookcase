@@ -169,7 +169,10 @@
             ></el-input>
           </el-col>
           <el-col :sm="24" :md="4">
-            <el-input v-model="add_info.grade_code" placeholder="排序號"></el-input>
+            <el-input
+              v-model="add_info.grade_code"
+              placeholder="排序號"
+            ></el-input>
           </el-col>
           <el-col :sm="24" :md="24">
             <el-input v-model="add_info.cover"
@@ -250,7 +253,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Vheader from "@/components/header.vue";
 import axios from "axios";
 export default {
@@ -378,7 +380,7 @@ export default {
         },
       ],
       add_info: {
-        grade_code:"",
+        grade_code: "",
         education_level: "",
         grade: "",
         species: "",
@@ -446,7 +448,7 @@ export default {
       });
       this.popUp = !this.popUp;
       await this.loadPage();
-      this.$swal("新增完成", "您新增了一筆資料","success");
+      this.$swal("新增完成", "您新增了一筆資料", "success");
     },
     edit(index) {
       //修改
@@ -476,9 +478,8 @@ export default {
       this.popUp = !this.popUp;
       await this.loadPage();
       this.delete_win = false;
-      this.$swal("修改完成", "您修改了一筆資料","success");
+      this.$swal("修改完成", "您修改了一筆資料", "success");
     },
-
     vdelete() {
       this.delete_win = true;
     },
@@ -489,7 +490,7 @@ export default {
       this.popUp = !this.popUp;
       this.delete_win = false;
       await this.loadPage();
-      this.$swal("刪除成功!", "您刪除了一筆資料","warning");
+      this.$swal("刪除成功!", "您刪除了一筆資料", "warning");
     },
   },
   components: {
